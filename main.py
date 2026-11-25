@@ -16,13 +16,14 @@ ROAST = (
 
 def write_roast() -> None:
     os.umask(0o022)
-    os.makedirs("/output", exist_ok=True)
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+    os.makedirs(out_dir, exist_ok=True)
     line = ROAST
     if not 1 <= len(line) <= 200:
         raise ValueError("roast must be 1-200 characters")
     if not line.strip():
         raise ValueError("roast must not be only whitespace")
-    target = "/output/entry.txt"
+    target = os.path.join(out_dir, "entry.txt")
     with open(target, "w", encoding="utf-8", newline="") as handle:
         handle.write(line)
     os.chmod(target, 0o644)
